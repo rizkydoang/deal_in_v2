@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>DeaL.in | Home</title>
+    <title>DeaL.in | {{title}}</title>
     <!-- for-mobile-apps -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -125,11 +125,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <div class="agile-login">
                 <ul>
                     {% if 'jwt' not in request.COOKIES %}
-                        <a href="#" class="btn btn-primary" role="button">Daftar</a>
-                    {% endif %}
+                        <a href="{% url 'signup_user' %}" class="btn btn-primary" role="button">Daftar</a>
                     <li>
-                    {% if 'jwt' not in request.COOKIES %}
-                        <a href="#" class="btn btn-primary" role="button">Masuk</a>
+                        <a href="{% url 'login_user' %}" class="btn btn-primary" role="button">Masuk</a>
                     {% endif %}
                     {% if 'jwt' in request.COOKIES %}
                         <div class="btn-group">
@@ -139,7 +137,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#">Profil</a>
                                 <a class="dropdown-item" href="#">Buka Toko</a>
-                                <a class="dropdown-item" href="#">Keluar</a>
+                                <a class="dropdown-item" href="{% url 'logout_user' %}">Keluar</a>
                             </div>
                         </div>
                     {% endif %}
