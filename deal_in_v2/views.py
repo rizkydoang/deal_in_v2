@@ -16,7 +16,6 @@ def login_user(request):
             response = requests.post('http://127.0.0.1:8000/api/auth/login/', json=data)
             result = []
             result.append(response.json())
-            print(result)
             if result[0]['user'] != []:
                 res = redirect("home")
                 res.set_cookie(
