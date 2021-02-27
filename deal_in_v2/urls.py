@@ -18,11 +18,24 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
+    # Index
     path('', views.index, name='home'),
     path('admin/', admin.site.urls),
+
+
+    # Authentication Store & Sign - Up Store
     path('login/', views.login_user, name='login_user'),
     path('logout/', views.logout, name='logout_user'),
     path('signup/', views.signup, name='signup_user'),
+    path('signup_store/', views.signup_store, name='signup_store'),
+    path('pin_store/', views.signup_store_auth, name='pin_store_auth'),
+
+    # Store App
+    path('store/', views.index_store, name='index_store'),
+
+
+    # API Microservice Deal_In
     path('api/auth/', include('auth_app.urls')),
     path('api/user/', include('profile_app.urls')),
+    path('api/store/', include('store_app.urls')),
 ]

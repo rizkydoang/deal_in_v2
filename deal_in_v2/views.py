@@ -1,13 +1,26 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import JsonResponse
-from deal_in_v2.models import TblUser, TblRole
 from deal_in_v2.jwt import JWTAuth 
+from deal_in_v2.models import TblUser, TblRole
 # from deal_in_v2.models import * 
 import requests
 
 
 # Create your views here.
+def index(request):
+    if 'jwt' in request.COOKIES:
+        jwt = JWTAuth()
+        username = jwt.decode(request.COOKIES['jwt'])
+        context = {
+            'title': 'Home',
+            'user': username['username']
+        }
+        return render(request, 'content/index.html', context)
+    else:
+        return render(request, 'content/index.html')
+
+        
 def login_user(request):
     if 'jwt' not in request.COOKIES:
         if request.method == "POST":
@@ -66,14 +79,90 @@ def signup(request):
         return render(request, 'login/signup.html', context)
 
 
-def index(request):
-    if 'jwt' in request.COOKIES:
-        jwt = JWTAuth()
-        username = jwt.decode(request.COOKIES['jwt'])
-        context = {
-            'title': 'Home',
-            'user': username['username']
-        }
-        return render(request, 'content/index.html', context)
+def signup_store(request):
+    if 'jwt' not in request.COOKIES:
+        return redirect("home")
     else:
-        return render(request, 'content/index.html')
+        if request.method == 'POST':
+            jwt = JWTAuth()
+            username = jwt.decode(request.COOKIES['jwt'])
+            image = request.FILES['ktp_photo']
+            data = {
+                "store": request.POST['store'],
+                "username": username['username'],
+                "documents": image.name,
+                "nik": request.POST['nik'],
+                "pin": request.POST['pin'],
+            }
+            response = requests.post('http://127.0.0.1:8000/api/auth/signup_store/'+username['username']+'/', json=data)
+            result = []
+            result.append(response.json())
+            if result[0]['store'] != []:
+                return redirect('pin_store_auth')
+            else:
+                messages.error(request, result[0]['message'])
+                context = {
+                    'title': 'Signup Store'
+                }
+                return render(request, 'login/signup_store.html', context)
+        elif request.method == 'GET':
+            jwt = JWTAuth()
+            username = jwt.decode(request.COOKIES['jwt'])
+            response = requests.get('http://127.0.0.1:8000/api/auth/signup_store/'+username['username']).json()
+            result = []
+            result.append(response)
+            if result[0]['store'] != []:
+                return redirect('pin_store_auth')
+            else:
+                messages.error(request, result[0]['message'])
+                context = {
+                    'title': 'Signup Store'
+                }
+                return render(request, 'login/signup_store.html', context)
+        context = {
+            'title': 'Signup Store'
+        }
+        return render(request, 'login/signup_store.html', context)
+
+
+def signup_store_auth(request):
+    if 'jwt' not in request.COOKIES:
+        return redirect("home")
+    else:
+        if 'pin' in request.COOKIES:
+            return redirect("index_store")
+        else:
+            if request.method == 'POST':
+                jwt = JWTAuth()
+                username = jwt.decode(request.COOKIES['jwt'])
+                pin = request.POST['pin']
+                data = {
+                    "username": username['username'],
+                    "pin": pin
+                }
+                response = requests.post('http://127.0.0.1:8000/api/auth/signup_store_auth/', json=data)
+                result = []
+                result.append(response.json())
+                if result[0]['values'] != []:
+                    res = redirect("index_store")
+                    res.set_cookie('pin', result[0]['token'], max_age=60*60*2)
+                    return res
+                else:
+                    messages.error(request, result[0]['message'])
+                    context = {
+                        'title': 'Store Auth'
+                    }
+                    return render(request, 'login/pin_store_auth.html', context)
+            context = {
+                'title': 'Store Auth'
+            }
+            return render(request, 'login/pin_store_auth.html', context)
+
+
+
+def index_store(request):
+    if 'pin' not in request.COOKIES:
+        return redirect("home")
+    else:
+        return render(request, 'store/index.html')
+
