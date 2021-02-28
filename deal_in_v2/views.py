@@ -48,6 +48,7 @@ def login_user(request):
 def logout(request):
     res = redirect('login_user')
     res.delete_cookie('jwt')
+    res.delete_cookie('pin')
     return res
 
 
@@ -143,7 +144,7 @@ def signup_store_auth(request):
                 response = requests.post('http://127.0.0.1:8000/api/auth/signup_store_auth/', json=data)
                 result = []
                 result.append(response.json())
-                if result[0]['values'] != []:
+                if result[0]['store'] != []:
                     res = redirect("index_store")
                     res.set_cookie('pin', result[0]['token'], max_age=60*60*2)
                     return res
@@ -161,7 +162,7 @@ def signup_store_auth(request):
 
 
 def index_store(request):
-    if 'pin' not in request.COOKIES:
+    if 'jwt' not in request.COOKIES or 'pin' not in request.COOKIES:
         return redirect("home")
     else:
         return render(request, 'store/index.html')

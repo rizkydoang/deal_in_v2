@@ -2,7 +2,7 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from deal_in_v2.jwt import JWTAuth
-from deal_in_v2.models import TblUser, TblRole, TblStore
+from deal_in_v2.models import TblUser, TblRole, TblStore, TblDocuments
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -61,7 +61,7 @@ def signup_store(request, username):
                 )
                 return JsonResponse({"store": list(TblStore.objects.filter(pk=json_data['store']).values().first()), "message": "Toko berhasil terdaftar"}, status=200)
         except:
-            return JsonResponse({"store": [], "message": "Nama Toko atau NIK yang anda masukan sudah terdaftar"}, status=400)
+            return JsonResponse({"store": [], "message": "Terjadi Error"}, status=400)
     if request.method == 'GET':
         store = TblStore.objects.filter(username=username).values().first()
         if not store:
