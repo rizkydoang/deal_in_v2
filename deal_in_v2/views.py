@@ -49,6 +49,7 @@ def logout(request):
     res = redirect('login_user')
     res.delete_cookie('jwt')
     res.delete_cookie('pin')
+    res.delete_cookie('store')
     return res
 
 
@@ -131,7 +132,7 @@ def signup_store_auth(request):
         return redirect("home")
     else:
         if 'pin' in request.COOKIES:
-            return redirect("index_store")
+            return redirect("index_store", id_store=request.COOKIES['store'])
         else:
             if request.method == 'POST':
                 jwt = JWTAuth()
@@ -145,8 +146,9 @@ def signup_store_auth(request):
                 result = []
                 result.append(response.json())
                 if result[0]['store'] != []:
-                    res = redirect("index_store")
+                    res = redirect("index_store", id_store=result[0]['store']['id'])
                     res.set_cookie('pin', result[0]['token'], max_age=60*60*2)
+                    res.set_cookie('store', result[0]['store']['id'], max_age=60*60*2)
                     return res
                 else:
                     messages.error(request, result[0]['message'])
@@ -161,9 +163,27 @@ def signup_store_auth(request):
 
 
 
-def index_store(request):
+def index_store(request, id_store):
     if 'jwt' not in request.COOKIES or 'pin' not in request.COOKIES:
         return redirect("home")
     else:
-        return render(request, 'store/index.html')
+        jwt = JWTAuth()
+        username = jwt.decode(request.COOKIES['jwt'])
+        response = requests.get('http://127.0.0.1:8000/api/auth/index_store/'+id_store).json()
+        result = []
+        result.append(response)
+        # if result[0]['item_store'] != []:
+        context = {
+            'title': 'Home Store',
+            'user': username['username'],
+            'store': request.COOKIES['store'],
+            'item_store': result[0]
+        }
+        return render(request, 'store/index.html', context)
+        # else:
+        #     messages.error(request, result[0]['message'])
+        #     context = {
+        #         'title': 'Signup Store'
+        #     }
+        #     return render(request, 'login/signup_store.html', context)
 

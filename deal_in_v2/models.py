@@ -75,7 +75,8 @@ class TblStore(models.Model):
         ('1', 'Aktif'),
         ('2', 'Di Tahan'),
     ]
-    store = models.CharField(primary_key=True, max_length=25)
+    id = models.CharField(primary_key=True, max_length=25)
+    store = models.CharField(max_length=25, unique=True)
     username = models.ForeignKey(
         'TblUser', models.DO_NOTHING, db_column='username', blank=True, null=True)
     nik = models.ForeignKey(

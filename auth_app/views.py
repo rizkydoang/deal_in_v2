@@ -2,7 +2,7 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from deal_in_v2.jwt import JWTAuth
-from deal_in_v2.models import TblUser, TblRole, TblStore, TblDocuments
+from deal_in_v2.models import TblUser, TblRole, TblStore, TblDocuments, TblItem
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -59,7 +59,7 @@ def signup_store(request, username):
                     nik=TblDocuments.objects.get(pk=json_data['nik']),
                     username=TblUser.objects.get(pk=json_data['username'])
                 )
-                return JsonResponse({"store": list(TblStore.objects.filter(pk=json_data['store']).values().first()), "message": "Toko berhasil terdaftar"}, status=200)
+                return JsonResponse({"store": TblStore.objects.filter(store=json_data['store']).values().first(), "message": "Toko berhasil terdaftar"}, status=200)
         except:
             return JsonResponse({"store": [], "message": "Terjadi Error"}, status=400)
     if request.method == 'GET':
@@ -79,6 +79,13 @@ def signup_store_auth(request):
         if store.pin == json_data['pin']:
             jwt = JWTAuth()
             store = TblStore.objects.filter(username=json_data['username']).values().first()
-            return JsonResponse({"store": list(store), "token": jwt.encode({"pin": store['pin']}), "message": "Berhasil"}, status=200)
+            return JsonResponse({"store": store, "token": jwt.encode({"pin": store['pin']}), "message": "Berhasil"}, status=200)
         else:
             return JsonResponse({"store": [], "message": "Pin Toko anda salah"}, status=400)
+
+
+
+def index_store(request, id_store):
+    if request.method == 'GET':
+        item_store = TblItem.objects.filter(id_store=id_store, deleted=0).values().first()
+        return JsonResponse({"item_store": item_store, "message": "Berhasil"}, status=200)

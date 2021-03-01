@@ -737,7 +737,7 @@ div#myTabContent {
 }
 
 .nav-tabs>li {
-    width: 50%;
+    width: 100%;
 }
 
 .nav-tabs>li>a {
