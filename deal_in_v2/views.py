@@ -5,6 +5,7 @@ from deal_in_v2.jwt import JWTAuth
 from deal_in_v2.models import TblUser, TblRole
 # from deal_in_v2.models import * 
 import requests
+import json
 
 
 # Create your views here.
@@ -90,6 +91,7 @@ def signup_store(request):
             username = jwt.decode(request.COOKIES['jwt'])
             image = request.FILES['ktp_photo']
             data = {
+                "id": request.POST['id'],
                 "store": request.POST['store'],
                 "username": username['username'],
                 "documents": image.name,
@@ -170,15 +172,13 @@ def index_store(request, id_store):
         jwt = JWTAuth()
         username = jwt.decode(request.COOKIES['jwt'])
         response = requests.get('http://127.0.0.1:8000/api/auth/index_store/'+id_store).json()
-        result = []
-        result.append(response)
-        # if result[0]['item_store'] != []:
         context = {
             'title': 'Home Store',
             'user': username['username'],
             'store': request.COOKIES['store'],
-            'item_store': result[0]
+            'item_store': response
         }
+        print(response)
         return render(request, 'store/index.html', context)
         # else:
         #     messages.error(request, result[0]['message'])

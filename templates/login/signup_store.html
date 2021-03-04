@@ -22,9 +22,15 @@
                         {% csrf_token %}
                         <div class="card-body">
                             <div class="form-group">
+                                <label for="name">Id Toko/Lapak :</label>
+                                <input type="text" class="form-control" id="id" name="id"
+                                placeholder="Masukan ID Toko Anda" required>
+                            </div>
+                            <p style="color: red; font-size: 12px;margin-top: -20px;">Tidak boleh ada Spasi</p>
+                            <div class="form-group">
                                 <label for="name">Nama Toko/Lapak :</label>
                                 <input type="text" class="form-control" id="store" name="store"
-                                    placeholder="Masukan Nama Anda" required>
+                                placeholder="Masukan Nama Toko Anda" required>
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
@@ -35,16 +41,18 @@
                                     <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                                 </div>
                             </div>
-                            <p style="color: red; font-size: 12px;">format foto : (.jpeg), (.jpg), (.png)</p>
-                            <div class="form-group">
-                                <label for="ktp_photo">NIK :</label>
-                                <input type="text" class="form-control" id="nik" name="nik"
-                                    placeholder="Masukan NIK anda" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="pin">PIN :</label>
-                                <input type="password" class="form-control" id="pin" maxlength="4" name="pin"
-                                    placeholder="Masukan PIN Toko" required>
+                            <p style="color: red; font-size: 12px;margin-top: -10px;">format foto : (.jpeg), (.jpg), (.png)</p>
+                            <div class="form-row">
+                                <div class="form-group col-md-8">
+                                    <label for="ktp_photo">NIK :</label>
+                                    <input type="text" class="form-control" id="nik" name="nik"
+                                            placeholder="Masukan NIK anda" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="pin">PIN :</label>
+                                    <input type="password" class="form-control" id="pin" maxlength="4" name="pin"
+                                        placeholder="Masukan PIN Toko" required>
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer">
