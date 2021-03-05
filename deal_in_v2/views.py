@@ -19,7 +19,10 @@ def index(request):
         }
         return render(request, 'content/index.html', context)
     else:
-        return render(request, 'content/index.html')
+        context = {
+            'title': 'Home',
+        }
+        return render(request, 'content/index.html', context)
 
         
 def login_user(request):
@@ -171,7 +174,7 @@ def index_store(request, id_store):
     else:
         jwt = JWTAuth()
         username = jwt.decode(request.COOKIES['jwt'])
-        response = requests.get('http://127.0.0.1:8000/api/auth/index_store/'+id_store).json()
+        response = requests.get('http://127.0.0.1:8000/api/store/index_store/'+id_store).json()
         context = {
             'title': 'Home Store',
             'user': username['username'],
@@ -180,10 +183,5 @@ def index_store(request, id_store):
         }
         print(response)
         return render(request, 'store/index.html', context)
-        # else:
-        #     messages.error(request, result[0]['message'])
-        #     context = {
-        #         'title': 'Signup Store'
-        #     }
-        #     return render(request, 'login/signup_store.html', context)
+
 

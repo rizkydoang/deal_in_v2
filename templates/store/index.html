@@ -6,7 +6,7 @@
         <h2>{{store}}</h2>
         <div class="grid_3 grid_5">
             <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
-                <ul id="myTab" class="nav nav-tabs" role="tablist">
+                <ul id="myTab" class="nav nav-tabs-in" role="tablist">
                     <li role="presentation" class="active"><a href="#expeditions" id="expeditions-tab" role="tab"
                             data-toggle="tab" aria-controls="expeditions" aria-expanded="true">BARANG ANDA</a></li>
                 </ul>
@@ -42,7 +42,7 @@
                                                                     <i class="fa fa-star blue-star" aria-hidden="true"></i>
                                                                     <i class="fa fa-star gray-star" aria-hidden="true"></i>
                                                                 </div>
-                                                                <h4>{{j.id_desc_id.price}}</h4>
+                                                                <h4>Rp. {{j.id_desc_id.price}}</h4>
                                                             </div>
                                                             <div class="snipcart-details top_brand_home_details">
                                                                 <form action="#" method="post">
@@ -69,6 +69,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {% empty %}
+                                    <h3 style="text-align: center;" >Barang Kosong</h3>
                                 {% endfor %}
                             {% endfor %}
                             <!-- end -->

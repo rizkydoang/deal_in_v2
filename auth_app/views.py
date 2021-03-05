@@ -2,7 +2,7 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from deal_in_v2.jwt import JWTAuth
-from deal_in_v2.models import TblUser, TblRole, TblStore, TblDocuments, TblItem, TblDescItem, TblCategory
+from deal_in_v2.models import *
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -86,17 +86,3 @@ def signup_store_auth(request):
 
 
 
-def index_store(request, id_store):
-    if request.method == 'GET':
-        try:
-            item_store = list(TblItem.objects.filter(id_store=id_store, deleted=0).values())
-
-            for i in item_store:
-                desc = TblDescItem.objects.filter(id=i['id_desc_id'], deleted=0).values().first()
-                cat = TblCategory.objects.filter(id=i['id_category_id'], deleted=0).values().first()
-                i.update({'id_desc_id': desc})
-                i.update({'id_category_id': cat})
-            return JsonResponse({"item_store": item_store}, status=200)  
-        except:
-            return JsonResponse({"item_store": []}, status=400)
-            
