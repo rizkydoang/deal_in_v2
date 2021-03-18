@@ -4,6 +4,11 @@ from django.http import JsonResponse
 from deal_in_v2.jwt import JWTAuth
 from deal_in_v2.models import *
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import ProfileSerializer, DocumentSerializer
 
 
 # Create your views here.
@@ -26,33 +31,53 @@ def login(request):
 @csrf_exempt
 def signup(request):
     if request.method == 'POST':
+        json_data = json.loads(request.body)
         try:
-            json_data = json.loads(request.body)
-            user = TblUser()
-            user.name = json_data['name']
-            user.username = json_data['username']
-            user.password = json_data['password']
-            user.address = json_data['address']
-            user.birth_date = json_data['birth_date']
-            user.id_role = TblRole.objects.get(pk=json_data['id_role'])
-            user.save()
+            TblUser.objects.create(
+                name = json_data['name'],
+                username = json_data['username'],
+                password = json_data['password'],
+                address = json_data['address'],
+                birth_date = json_data['birth_date'],
+                id_role = TblRole.objects.get(pk=json_data['id_role'])
+            )
             return JsonResponse({"user": list(TblUser.objects.filter(username=json_data['username']).values().first()), "message": "Akun Berhasil Terdaftar. Silahkan Login terlebih dahulu"}, status=200)
         except:
-            return JsonResponse({"user": [], "message": "Isi data sesuai aturan!"}, status=200)
+            return JsonResponse({"user": [], "message": "Isi data sesuai aturan!"}, status=400)
 
+
+class ImageView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request, *args, **kwargs):
+        if request.data['side'] == 'profile':
+            image_serializer = ProfileSerializer(data=request.data)
+            if image_serializer.is_valid():
+                image_serializer.save()
+                return Response({'user': image_serializer.data, "message": "Akun Berhasil Terdaftar. Silahkan Login terlebih dahulu"}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({"user": []}, status=status.HTTP_400_BAD_REQUEST)
+        elif request.data['side'] == 'store':
+            image_serializer = DocumentSerializer(data=request.data)
+            if not TblStore.objects.filter(store=request.data['store']).exists():
+                if not TblStore.objects.filter(pk=request.data['id_store']).exists():
+                    if image_serializer.is_valid():
+                        image_serializer.save()
+                        return Response({'store': image_serializer.data}, status=status.HTTP_201_CREATED)
+                    else:
+                        return Response({'store': [], "message": "NIK yang anda masukan sudah terdaftar"}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({'store': [], "message": "ID Toko yang anda masukan sudah terdaftar"}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'store': [], "message": "Nama Toko yang anda masukan sudah terdaftar"}, status=status.HTTP_400_BAD_REQUEST)
+ 
 
 @csrf_exempt
 def signup_store(request, username):
     if request.method == 'POST':
         try:
             json_data = json.loads(request.body)
-            if TblDocuments.objects.filter(pk=json_data['nik']).exists() or TblStore.objects.filter(pk=json_data['store']).exists():
-                return JsonResponse({'store':[], "message": "Nama Toko atau NIK yang anda masukan sudah terdaftar"}, status=400)
-            else:
-                TblDocuments.objects.create(
-                    id=json_data['nik'],
-                    photo=json_data['documents']
-                )
+            if TblDocuments.objects.filter(pk=json_data['nik']).exists():
                 TblStore.objects.create(
                     id=json_data['id'],
                     store=json_data['store'],
@@ -61,6 +86,8 @@ def signup_store(request, username):
                     username=TblUser.objects.get(pk=json_data['username'])
                 )
                 return JsonResponse({"store": TblStore.objects.filter(store=json_data['store']).values().first(), "message": "Toko berhasil terdaftar"}, status=200)
+            else:
+                return JsonResponse({'store':[], "message": "Nama Toko atau ID Toko yang anda masukan sudah terdaftar"}, status=400)
         except:
             return JsonResponse({"store": [], "message": "Terjadi Error"}, status=400)
     if request.method == 'GET':

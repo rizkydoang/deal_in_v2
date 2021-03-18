@@ -10,17 +10,20 @@ import json
 
 # Create your views here.
 def index(request):
+    response = requests.get('http://127.0.0.1:8000/api/store/index_home/').json()
     if 'jwt' in request.COOKIES:
         jwt = JWTAuth()
         username = jwt.decode(request.COOKIES['jwt'])
         context = {
             'title': 'Home',
-            'user': username['username']
+            'user': username['username'],
+            'all_item': response
         }
         return render(request, 'content/index.html', context)
     else:
         context = {
             'title': 'Home',
+            'all_item': response
         }
         return render(request, 'content/index.html', context)
 
@@ -30,8 +33,8 @@ def login_user(request):
         if request.method == "POST":
             username = request.POST['username']
             password = request.POST['password']
-            data = {"username": username, "password": password}
-            response = requests.post('http://127.0.0.1:8000/api/auth/login/', json=data)
+            data_json = {"username": username, "password": password}
+            response = requests.post('http://127.0.0.1:8000/api/auth/login/', json=data_json)
             result = []
             result.append(response.json())
             if result[0]['user'] != []:
@@ -62,15 +65,17 @@ def signup(request):
         return redirect("home")
     else:
         if request.method == 'POST':
-            data = {
+            image = {'photo_profile': request.FILES['photo_profile']}
+            data_json = {
                 "name": request.POST['name'],
                 "username": request.POST['username'],
                 "address": request.POST['address'],
                 "birth_date": request.POST['birth_date'],
                 "id_role": request.POST['role'],
-                "password": request.POST['password']
+                "password": request.POST['password'],
+                'side': 'profile'
             }
-            response = requests.post('http://127.0.0.1:8000/api/auth/signup', json=data)
+            response = requests.post('http://127.0.0.1:8000/api/auth/upload/', files=image, data=data_json)
             result = []
             result.append(response.json())
             if result[0]['user'] != []:
@@ -92,26 +97,42 @@ def signup_store(request):
         if request.method == 'POST':
             jwt = JWTAuth()
             username = jwt.decode(request.COOKIES['jwt'])
-            image = request.FILES['ktp_photo']
-            data = {
+            data_json = {
                 "id": request.POST['id'],
                 "store": request.POST['store'],
                 "username": username['username'],
-                "documents": image.name,
                 "nik": request.POST['nik'],
                 "pin": request.POST['pin'],
             }
-            response = requests.post('http://127.0.0.1:8000/api/auth/signup_store/'+username['username']+'/', json=data)
-            result = []
-            result.append(response.json())
-            if result[0]['store'] != []:
-                return redirect('pin_store_auth')
+            image = {"photo_store": request.FILES['ktp_photo']}
+            data_img = {
+                "id": request.POST['nik'],
+                "id_store": request.POST['id'],
+                "store": request.POST['store'],
+                "side": "store"
+            }
+            img_response = requests.post('http://127.0.0.1:8000/api/auth/upload/', files=image, data=data_img)
+            img_result = []
+            img_result.append(img_response.json())
+            if img_result[0]['store'] != []:
+                response = requests.post('http://127.0.0.1:8000/api/auth/signup_store/'+username['username']+'/', json=data_json)
+                result = []
+                result.append(response.json())
+                if result[0]['store'] != []:
+                    return redirect('pin_store_auth')
+                else:
+                    messages.error(request, result[0]['message'])
+                    context = {
+                        'title': 'Signup Store'
+                    }
+                    return render(request, 'login/signup_store.html', context)
             else:
-                messages.error(request, result[0]['message'])
+                messages.error(request, img_result[0]['message'])
                 context = {
                     'title': 'Signup Store'
                 }
                 return render(request, 'login/signup_store.html', context)
+            
         elif request.method == 'GET':
             jwt = JWTAuth()
             username = jwt.decode(request.COOKIES['jwt'])
@@ -143,11 +164,11 @@ def signup_store_auth(request):
                 jwt = JWTAuth()
                 username = jwt.decode(request.COOKIES['jwt'])
                 pin = request.POST['pin']
-                data = {
+                data_json = {
                     "username": username['username'],
                     "pin": pin
                 }
-                response = requests.post('http://127.0.0.1:8000/api/auth/signup_store_auth/', json=data)
+                response = requests.post('http://127.0.0.1:8000/api/auth/signup_store_auth/', json=data_json)
                 result = []
                 result.append(response.json())
                 if result[0]['store'] != []:
@@ -181,7 +202,6 @@ def index_store(request, id_store):
             'store': request.COOKIES['store'],
             'item_store': response
         }
-        print(response)
         return render(request, 'store/index.html', context)
 
 

@@ -1,6 +1,57 @@
 {% extends 'master/base-content.html' %}
 {% load static %}
 {% block content %}
+<div class="modal fade" id="add_item" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Silahkan Daftar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Nama Barang / Produk :</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Masukan nama">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Foto Barang / Produk :</label>
+                            <input type="file" class="form-control" id="exampleInputEmail1" placeholder="Masukan email">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Jumlah :</label>
+                            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Masukan No Telepon">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Deskripsi :</label>
+                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Harga : </label>
+                            <input type="number" class="form-control" id="exampleInputPassword1" placeholder="Konfirmasi Password">
+                        </div>
+                        <div class="form-group">
+                            <div class="col-auto my-1">
+                                <label class="mr-sm-2" for="inlineFormCustomSelect">Kategori</label>
+                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                  <option selected>Pilih...</option>
+                                  <option value="1">Sayuran</option>
+                                  <option value="2">Makanan</option>
+                                </select>
+                              </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-primary" href="">Daftar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="top-brands">
     <div class="container">
         <h2>{{store}}</h2>
@@ -14,6 +65,9 @@
                     <div role="tabpanel" class="tab-pane fade in active" id="expeditions"
                         aria-labelledby="expeditions-tab">
                         <div class="agile-tp">
+                            <button type="button" style="float: right; margin-top: -10px;" class="btn btn-primary" data-toggle="modal" data-target="#add_item">
+                                Tambah Barang
+                            </button>
                             <h5>BARANG ANDA</h5>
                             <p class="w3l-ad">Pasang Iklan barang jualan mu disini agar meningkatkan peluang bisnis mu!
                             </p>

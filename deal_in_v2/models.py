@@ -27,25 +27,17 @@ class TblDataTrans(models.Model):
         db_table = 'tbl_data_trans'
 
 
-class TblDescItem(models.Model):
-    description = models.CharField(max_length=300, blank=True, null=True)
-    photo = models.CharField(max_length=50)
-    price = models.IntegerField()
-    deleted = models.CharField(max_length=1, default=0)
-
-    class Meta:
-        db_table = 'tbl_desc_item'
-
 
 class TblItem(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True)
     quantity = models.IntegerField(blank=True, null=True)
+    description = models.CharField(max_length=300, blank=True, null=True)
+    photo_item = models.ImageField(default='0', upload_to='images/item/')
+    price = models.IntegerField(default=0)
     id_store = models.ForeignKey(
         'TblStore', models.DO_NOTHING, db_column='id_store', blank=True, null=True)
     id_category = models.ForeignKey(
         'TblCategory', models.DO_NOTHING, db_column='id_category', blank=True, null=True)
-    id_desc = models.ForeignKey(
-        'TblDescItem', models.DO_NOTHING, db_column='id_desc', blank=True, null=True)
     deleted = models.CharField(max_length=1, default=0)
 
     class Meta:
@@ -62,7 +54,7 @@ class TblRole(models.Model):
 
 class TblDocuments(models.Model):
     id = models.TextField(primary_key=True)
-    photo = models.CharField(max_length=100)
+    photo_store = models.ImageField(upload_to='images/store/')
     deleted = models.CharField(max_length=1, default=0)
 
     class Meta:
@@ -110,6 +102,7 @@ class TblUser(models.Model):
     password = models.CharField(max_length=20)
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
+    photo_profile = models.ImageField(default='0', upload_to='images/profile/')
     birth_date = models.DateField()
     id_role = models.ForeignKey(
         'TblRole', models.DO_NOTHING, db_column='id_role')
