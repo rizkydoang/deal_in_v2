@@ -33,3 +33,5 @@ def index_store(request, id_store):
             return JsonResponse({"item_store": item_store}, status=200)  
         except:
             return JsonResponse({"item_store": []}, status=400)
+
+

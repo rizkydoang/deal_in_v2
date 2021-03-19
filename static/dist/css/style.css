@@ -740,6 +740,11 @@ div#myTabContent {
     width: 50%;
 }
 
+.img_item{
+    width: 220px;
+    height: 200px;
+}
+
 .nav-tabs>li>a {
     margin: 0 0px;
     padding: 10px 53px;

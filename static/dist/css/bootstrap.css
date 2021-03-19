@@ -3210,7 +3210,8 @@ input[type="search"] {
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 30px;
+    margin-left: 15px;
 }
 
 .radio,

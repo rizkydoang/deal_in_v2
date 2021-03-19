@@ -205,3 +205,25 @@ def index_store(request, id_store):
         return render(request, 'store/index.html', context)
 
 
+
+def add_item(request):
+    if request.method == 'POST':
+        data_img = {
+            'name': request.POST['name'],
+            'quantity': request.POST['quantity'],
+            'price': request.POST['price'],
+            'id_store': request.COOKIES['store'],
+            'id_category': request.POST['id_category'],
+            'description': request.POST['description'],
+            'side': 'item'
+        }
+        image = {
+            'photo_item': request.FILES['photo_item']
+        }
+        
+        response = requests.post('http://127.0.0.1:8000/api/auth/upload/', files=image, data=data_img).json()
+        print(response)
+        return redirect("index_store", id_store=request.COOKIES['store'])
+
+
+        

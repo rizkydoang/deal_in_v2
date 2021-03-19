@@ -33,7 +33,8 @@ urlpatterns = [
     path('pin_store/', views.signup_store_auth, name='pin_store_auth'),
 
     # Store App
-    path('store/<slug:id_store>/', views.index_store, name='index_store'),
+    path('store/index/<slug:id_store>/', views.index_store, name='index_store'),
+    path('store/add_item/', views.add_item, name='add_item_store'),
 
 
     # API Microservice Deal_In

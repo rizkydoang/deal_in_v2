@@ -5,47 +5,54 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Silahkan Daftar</h5>
+                <h2 class="modal-title" style="text-align: center;" id="exampleModalLabel">Tambahkan Barang Anda</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
             </div>
             <div class="modal-body">
-                <form role="form">
+                <form role="form" method="POST" action="{% url 'add_item_store' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <div class="card-body">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Nama Barang / Produk :</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Masukan nama">
+                        <div class="form-row">
+                            <div class="form-group col-md-5">
+                                <label for="item">Nama Barang / Produk :</label>
+                                <input type="text" class="form-control" id="item" name="name" placeholder="Nama Barang / Produk">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="photo_item">Foto Barang / Produk :</label>
+                                <input type="file" class="form-control" id="photo_item" name="photo_item" placeholder="Upload Foto Barang">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Foto Barang / Produk :</label>
-                            <input type="file" class="form-control" id="exampleInputEmail1" placeholder="Masukan email">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Jumlah :</label>
-                            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Masukan No Telepon">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Deskripsi :</label>
-                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Harga : </label>
-                            <input type="number" class="form-control" id="exampleInputPassword1" placeholder="Konfirmasi Password">
-                        </div>
-                        <div class="form-group">
-                            <div class="col-auto my-1">
-                                <label class="mr-sm-2" for="inlineFormCustomSelect">Kategori</label>
-                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-                                  <option selected>Pilih...</option>
-                                  <option value="1">Sayuran</option>
-                                  <option value="2">Makanan</option>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="qty">Jumlah :</label>
+                                <input type="number" class="form-control" id="qty" name="quantity" placeholder="Jumlah Barang">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="price">Harga : </label>
+                                <input type="number" class="form-control" id="price" name="price" placeholder="Harga Barang">
+                            </div>
+                            <input type="hidden" class="form-control" id="id_store" name="id_store" value="{{store}}">
+                            <div class="form-group col-md-3">
+                                <label class="mr-sm-2" for="category">Kategori</label><br>
+                                <select class="custom-select mr-sm-2" style="margin-top: 2.5px;" id="category" name="id_category">
+                                <option selected>Pilih...</option>
+                                <option value="1">Sayuran</option>
+                                <option value="2">Makanan</option>
                                 </select>
-                              </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-11">
+                                <label for="desc">Deskripsi :</label>
+                                <input type="text" class="form-control" id="desc" name="description" placeholder="Deskripsi Barang">
+                            </div>
                         </div>
                     </div>
+                    </div>
                     <div class="modal-footer">
-                        <a class="btn btn-primary" href="">Daftar</a>
+                        <input type="submit" class="btn btn-primary" value="Tambahkan"/>
                     </div>
                 </form>
             </div>
@@ -86,8 +93,8 @@
                                                     <figure>
                                                         <div class="snipcart-item block">
                                                             <div class="snipcart-thumb">
-                                                                <a href="products.html"><img title=" " alt=" "
-                                                                        src="{% static 'images/1.png' %}" /></a>
+                                                                <a href="products.html"><img title=" " class="img_item" alt=" "
+                                                                        src="/media/{{j.photo_item}}" /></a>
                                                                 <p>{{j.name}}</p>
                                                                 <div class="stars">
                                                                     <i class="fa fa-star blue-star" aria-hidden="true"></i>
@@ -96,7 +103,7 @@
                                                                     <i class="fa fa-star blue-star" aria-hidden="true"></i>
                                                                     <i class="fa fa-star gray-star" aria-hidden="true"></i>
                                                                 </div>
-                                                                <h4>Rp. {{j.id_desc_id.price}}</h4>
+                                                                <h4>Rp. {{j.price}}</h4>
                                                             </div>
                                                             <div class="snipcart-details top_brand_home_details">
                                                                 <form action="#" method="post">

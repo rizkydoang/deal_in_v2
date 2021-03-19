@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import ProfileSerializer, DocumentSerializer
+from .serializers import ProfileSerializer, DocumentSerializer, ItemSerializer
 
 
 # Create your views here.
@@ -70,6 +70,13 @@ class ImageView(APIView):
                     return Response({'store': [], "message": "ID Toko yang anda masukan sudah terdaftar"}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({'store': [], "message": "Nama Toko yang anda masukan sudah terdaftar"}, status=status.HTTP_400_BAD_REQUEST)
+        elif request.data['side'] == 'item':
+            image_serializer = ItemSerializer(data=request.data)
+            if image_serializer.is_valid():
+                image_serializer.save()
+                return Response({'item': image_serializer.data, "message": "Barang berhasil ditambahkan"}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({"item": []}, status=status.HTTP_400_BAD_REQUEST)
  
 
 @csrf_exempt
