@@ -31,9 +31,7 @@ def index(request):
 def login_user(request):
     if 'jwt' not in request.COOKIES:
         if request.method == "POST":
-            username = request.POST['username']
-            password = request.POST['password']
-            data_json = {"username": username, "password": password}
+            data_json = {"username": request.POST['username'], "password": request.POST['password']}
             response = requests.post('http://127.0.0.1:8000/api/auth/login/', json=data_json)
             result = []
             result.append(response.json())
@@ -202,6 +200,7 @@ def index_store(request, id_store):
             'store': request.COOKIES['store'],
             'item_store': response
         }
+        print(response)
         return render(request, 'store/index.html', context)
 
 
@@ -221,8 +220,17 @@ def add_item(request):
             'photo_item': request.FILES['photo_item']
         }
         
-        response = requests.post('http://127.0.0.1:8000/api/auth/upload/', files=image, data=data_img).json()
-        print(response)
+        requests.post('http://127.0.0.1:8000/api/auth/upload/', files=image, data=data_img).json()
+        return redirect("index_store", id_store=request.COOKIES['store'])
+
+
+def delete_item(request):
+    if request.method == 'POST':
+        data_item = {
+            'id_item': request.POST['id_item'],
+        }
+        
+        response = requests.post('http://127.0.0.1:8000/api/store/delete_item/', json=data_item).json()
         return redirect("index_store", id_store=request.COOKIES['store'])
 
 

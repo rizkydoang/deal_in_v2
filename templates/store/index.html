@@ -107,21 +107,14 @@
                                                             </div>
                                                             <div class="snipcart-details top_brand_home_details">
                                                                 <form action="#" method="post">
-                                                                    <fieldset>
-                                                                        <input type="hidden" name="cmd" value="_cart" />
-                                                                        <input type="hidden" name="add" value="1" />
-                                                                        <input type="hidden" name="business" value=" " />
-                                                                        <input type="hidden" name="item_name"
-                                                                            value="Fortune Sunflower Oil" />
-                                                                        <input type="hidden" name="amount" value="20.99" />
-                                                                        <input type="hidden" name="discount_amount"
-                                                                            value="1.00" />
-                                                                        <input type="hidden" name="currency_code" value="RP" />
-                                                                        <input type="hidden" name="return" value=" " />
-                                                                        <input type="hidden" name="cancel_return" value=" " />
-                                                                        <input type="submit" name="submit" value="Add to cart"
-                                                                            class="button" />
-                                                                    </fieldset>
+                                                                    {% csrf_token %}
+                                                                    <input type="hidden" name="id_item" id="id_item" value="{{j.id}}">
+                                                                    <input type="submit" name="submit" value="Edit" class="button" />
+                                                                </form>
+                                                                <form action="{% url 'delete_item_store' %}" method="post">
+                                                                    {% csrf_token %}
+                                                                    <input type="hidden" name="id_item" id="id_item" value="{{j.id}}">
+                                                                    <input type="submit" name="submit" value="Hapus" class="button-delete" />
                                                                 </form>
                                                             </div>
                                                         </div>

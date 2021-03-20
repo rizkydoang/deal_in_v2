@@ -595,6 +595,7 @@ ul.multi-column-dropdown h6 {
     text-transform: uppercase;
     padding: .5em 0;
     outline: none;
+    margin-bottom: 10px;
 }
 
 .agile_top_brand_left_grid:hover .snipcart-details input.button,
@@ -603,6 +604,35 @@ ul.multi-column-dropdown h6 {
 }
 
 .product_list_header input.button {
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    text-transform: capitalize;
+    padding: .5em 2.5em .5em 1em;
+    border: 1px solid #fe9126;
+    margin: .35em 0 0;
+}
+
+.snipcart-details input.button-delete {
+    font-size: 14px;
+    color: #fff;
+    background: #ff7e38;
+    text-decoration: none;
+    position: relative;
+    border: none;
+    border-radius: 20px;
+    width: 100%;
+    text-transform: uppercase;
+    padding: .5em 0;
+    outline: none;
+}
+
+.agile_top_brand_left_grid:hover .snipcart-details input.button-delete,
+.snipcart-details input.button-delete:hover {
+    background: #ff3838;
+}
+
+.product_list_header input.button-delete {
     color: #fff;
     font-size: 14px;
     outline: none;
@@ -3533,6 +3563,9 @@ h3.agileits-icons-title {
     .snipcart-details input.button {
         width: 54%;
     }
+    .snipcart-details input.button-delete {
+        width: 54%;
+    }
     .agile_top_brands_grids {
         margin-top: 2em;
     }
@@ -3621,6 +3654,9 @@ h3.agileits-icons-title {
         max-height: 100px !important;
     }
     .snipcart-details input.button {
+        width: 64%;
+    }
+    .snipcart-details input.button-delete {
         width: 64%;
     }
     .agile-login {

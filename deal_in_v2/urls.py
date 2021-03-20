@@ -35,6 +35,7 @@ urlpatterns = [
     # Store App
     path('store/index/<slug:id_store>/', views.index_store, name='index_store'),
     path('store/add_item/', views.add_item, name='add_item_store'),
+    path('store/delete_item/', views.delete_item, name='delete_item_store'),
 
 
     # API Microservice Deal_In
