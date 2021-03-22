@@ -59,6 +59,8 @@ var check_login_pass = function() {
     }
 }
 
+
+
 // function removeById(id){
 //     var elem = document.getElementById(id)
 //     elem.removeChild.removeChild(elem)

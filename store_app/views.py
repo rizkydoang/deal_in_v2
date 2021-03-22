@@ -46,3 +46,19 @@ def delete_item(request):
         except:
             return JsonResponse({"message": "Terjadi Error"})
 
+
+@csrf_exempt
+def update_item(request):
+    if request.method == "POST":
+        json_data = json.loads(request.body)
+        try:
+            TblItem.objects.filter(pk=json_data['id_item']).update(
+                
+            )
+            return JsonResponse({"message": "Berhasil Menghapus Barang dari Toko"})
+        except:
+            return JsonResponse({"message": "Terjadi Error"})
+
+
+
+

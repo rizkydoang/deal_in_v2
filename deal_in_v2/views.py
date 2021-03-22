@@ -200,7 +200,6 @@ def index_store(request, id_store):
             'store': request.COOKIES['store'],
             'item_store': response
         }
-        print(response)
         return render(request, 'store/index.html', context)
 
 
@@ -216,6 +215,9 @@ def add_item(request):
             'description': request.POST['description'],
             'side': 'item'
         }
+        # if request.FILES['photo_item'] == '':
+        #     requests.post('http://127.0.0.1:8000/api/store/update/', json=data_img).json()
+
         image = {
             'photo_item': request.FILES['photo_item']
         }
@@ -230,7 +232,7 @@ def delete_item(request):
             'id_item': request.POST['id_item'],
         }
         
-        response = requests.post('http://127.0.0.1:8000/api/store/delete_item/', json=data_item).json()
+        requests.post('http://127.0.0.1:8000/api/store/delete_item/', json=data_item).json()
         return redirect("index_store", id_store=request.COOKIES['store'])
 
 
