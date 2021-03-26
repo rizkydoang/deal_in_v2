@@ -11,6 +11,7 @@ import json
 # Create your views here.
 def index(request):
     response = requests.get('https://deal-in-v2.herokuapp.com/api/store/index_home/').json()
+    print(response)
     if 'jwt' in request.COOKIES:
         jwt = JWTAuth()
         username = jwt.decode(request.COOKIES['jwt'])
