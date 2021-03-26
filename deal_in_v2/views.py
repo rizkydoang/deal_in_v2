@@ -10,7 +10,7 @@ import json
 
 # Create your views here.
 def index(request):
-    response = requests.get('http://127.0.0.1:8000/api/store/index_home/').json()
+    response = requests.get('https://deal-in-v2.herokuapp.com/api/store/index_home/').json()
     if 'jwt' in request.COOKIES:
         jwt = JWTAuth()
         username = jwt.decode(request.COOKIES['jwt'])
@@ -32,7 +32,7 @@ def login_user(request):
     if 'jwt' not in request.COOKIES:
         if request.method == "POST":
             data_json = {"username": request.POST['username'], "password": request.POST['password']}
-            response = requests.post('http://127.0.0.1:8000/api/auth/login/', json=data_json)
+            response = requests.post('https://deal-in-v2.herokuapp.com/api/auth/login/', json=data_json)
             result = []
             result.append(response.json())
             if result[0]['user'] != []:
@@ -73,7 +73,7 @@ def signup(request):
                 "password": request.POST['password'],
                 'side': 'profile'
             }
-            response = requests.post('http://127.0.0.1:8000/api/auth/upload/', files=image, data=data_json)
+            response = requests.post('https://deal-in-v2.herokuapp.com/api/auth/upload/', files=image, data=data_json)
             result = []
             result.append(response.json())
             if result[0]['user'] != []:
@@ -109,11 +109,11 @@ def signup_store(request):
                 "store": request.POST['store'],
                 "side": "store"
             }
-            img_response = requests.post('http://127.0.0.1:8000/api/auth/upload/', files=image, data=data_img)
+            img_response = requests.post('https://deal-in-v2.herokuapp.com/api/auth/upload/', files=image, data=data_img)
             img_result = []
             img_result.append(img_response.json())
             if img_result[0]['store'] != []:
-                response = requests.post('http://127.0.0.1:8000/api/auth/signup_store/'+username['username']+'/', json=data_json)
+                response = requests.post('https://deal-in-v2.herokuapp.com/api/auth/signup_store/'+username['username']+'/', json=data_json)
                 result = []
                 result.append(response.json())
                 if result[0]['store'] != []:
@@ -134,7 +134,7 @@ def signup_store(request):
         elif request.method == 'GET':
             jwt = JWTAuth()
             username = jwt.decode(request.COOKIES['jwt'])
-            response = requests.get('http://127.0.0.1:8000/api/auth/signup_store/'+username['username']).json()
+            response = requests.get('https://deal-in-v2.herokuapp.com/api/auth/signup_store/'+username['username']).json()
             result = []
             result.append(response)
             if result[0]['store'] != []:
@@ -166,7 +166,7 @@ def signup_store_auth(request):
                     "username": username['username'],
                     "pin": pin
                 }
-                response = requests.post('http://127.0.0.1:8000/api/auth/signup_store_auth/', json=data_json)
+                response = requests.post('https://deal-in-v2.herokuapp.com/api/auth/signup_store_auth/', json=data_json)
                 result = []
                 result.append(response.json())
                 if result[0]['store'] != []:
@@ -193,7 +193,7 @@ def index_store(request, id_store):
     else:
         jwt = JWTAuth()
         username = jwt.decode(request.COOKIES['jwt'])
-        response = requests.get('http://127.0.0.1:8000/api/store/index_store/'+id_store).json()
+        response = requests.get('https://deal-in-v2.herokuapp.com/api/store/index_store/'+id_store).json()
         context = {
             'title': 'Home Store',
             'user': username['username'],
@@ -216,13 +216,13 @@ def add_item(request):
             'side': 'item'
         }
         # if request.FILES['photo_item'] == '':
-        #     requests.post('http://127.0.0.1:8000/api/store/update/', json=data_img).json()
+        #     requests.post('https://deal-in-v2.herokuapp.com/api/store/update/', json=data_img).json()
 
         image = {
             'photo_item': request.FILES['photo_item']
         }
         
-        requests.post('http://127.0.0.1:8000/api/auth/upload/', files=image, data=data_img).json()
+        requests.post('https://deal-in-v2.herokuapp.com/api/auth/upload/', files=image, data=data_img).json()
         return redirect("index_store", id_store=request.COOKIES['store'])
 
 
@@ -232,7 +232,7 @@ def delete_item(request):
             'id_item': request.POST['id_item'],
         }
         
-        requests.post('http://127.0.0.1:8000/api/store/delete_item/', json=data_item).json()
+        requests.post('https://deal-in-v2.herokuapp.com/api/store/delete_item/', json=data_item).json()
         return redirect("index_store", id_store=request.COOKIES['store'])
 
 
