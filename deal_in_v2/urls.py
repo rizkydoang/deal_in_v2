@@ -22,7 +22,6 @@ from . import views
 urlpatterns = [
     # Index
     path('', views.index, name='home'),
-    path('admin/', admin.site.urls),
 
 
     # Authentication Store & Sign - Up Store
